@@ -1,0 +1,7 @@
+- name: set jenkins http port
+  lineinfile:
+    path: /etc/default/jenkins
+    regexp: '^HTTP_PORT='
+    line: "HTTP_PORT={{ jenkins_http_port }}"
+    backup: true
+  notify: restart jenkins

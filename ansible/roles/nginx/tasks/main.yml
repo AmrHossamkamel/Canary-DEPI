@@ -1,0 +1,8 @@
+- name: include install tasks
+  import_tasks: install.yml
+
+- name: include configure tasks
+  import_tasks: configure.yml
+
+- name: include service tasks
+  import_tasks: service.yml

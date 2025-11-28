@@ -1,0 +1,5 @@
+- name: ensure jenkins service
+  service:
+    name: jenkins
+    state: started
+    enabled: true

@@ -1,0 +1,8 @@
+- name: update apt cache
+  apt:
+    update_cache: true
+
+- name: install nginx packages
+  apt:
+    name: "{{ nginx_packages }}"
+    state: present

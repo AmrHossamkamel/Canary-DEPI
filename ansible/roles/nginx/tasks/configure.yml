@@ -1,0 +1,26 @@
+- name: remove default site
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+  when: nginx_remove_default_site
+
+- name: deploy app server config
+  template:
+    src: app.conf.j2
+    dest: /etc/nginx/sites-available/app.conf
+    mode: '0644'
+
+- name: enable app server config
+  file:
+    src: /etc/nginx/sites-available/app.conf
+    dest: /etc/nginx/sites-enabled/app.conf
+    state: link
+    force: true
+
+- name: optionally manage main nginx.conf
+  template:
+    src: nginx.conf.j2
+    dest: /etc/nginx/nginx.conf
+    mode: '0644'
+  when: nginx_manage_main_conf
+  notify: restart nginx
