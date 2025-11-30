@@ -1,8 +1,9 @@
-- name: update apt cache
-  apt:
-    update_cache: true
+ - name: Debian | update apt cache
+   apt:
+     update_cache: true
+   when: ansible_os_family == 'Debian'
 
-- name: install nginx packages
-  apt:
-    name: "{{ nginx_packages }}"
-    state: present
+ - name: Install nginx packages
+   package:
+     name: "{{ nginx_packages }}"
+     state: present

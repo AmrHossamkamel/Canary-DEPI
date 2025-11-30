@@ -1,26 +1,20 @@
-- name: update apt cache
-  apt:
-    update_cache: true
-
-- name: install java runtime
-  apt:
-    name: openjdk-11-jre
+- name: AL2023 | install java runtime
+  dnf:
+    name: java-17-amazon-corretto
     state: present
 
-- name: add jenkins key
+- name: AL2023 | add jenkins repo file
   get_url:
-    url: "{{ jenkins_key_url }}"
-    dest: /usr/share/keyrings/jenkins-keyring.asc
+    url: https://pkg.jenkins.io/redhat-stable/jenkins.repo
+    dest: /etc/yum.repos.d/jenkins.repo
     mode: '0644'
 
-- name: add jenkins repo
-  apt_repository:
-    repo: "{{ jenkins_repo }}"
-    filename: jenkins
+- name: AL2023 | import jenkins rpm key
+  rpm_key:
     state: present
+    key: https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
 
-- name: install jenkins
-  apt:
+- name: AL2023 | install jenkins
+  dnf:
     name: jenkins
     state: present
-    update_cache: true

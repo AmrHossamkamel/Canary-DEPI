@@ -1,7 +1,30 @@
-- name: set jenkins http port
-  lineinfile:
-    path: /etc/default/jenkins
-    regexp: '^HTTP_PORT='
-    line: "HTTP_PORT={{ jenkins_http_port }}"
-    backup: true
-  notify: restart jenkins
+ - name: set jenkins http port
+   lineinfile:
+     path: /etc/default/jenkins
+     regexp: '^HTTP_PORT='
+     line: "HTTP_PORT={{ jenkins_http_port }}"
+     backup: true
+   notify: restart jenkins
+   when: ansible_os_family == 'Debian'
+
+ - name: RedHat | ensure jenkins systemd drop-in dir
+   file:
+     path: /etc/systemd/system/jenkins.service.d
+     state: directory
+     mode: '0755'
+   when: ansible_os_family == 'RedHat'
+
+ - name: RedHat | set jenkins http port via systemd drop-in
+   copy:
+     dest: /etc/systemd/system/jenkins.service.d/override.conf
+     mode: '0644'
+     content: |
+       [Service]
+       Environment="JENKINS_PORT={{ jenkins_http_port }}"
+   when: ansible_os_family == 'RedHat'
+   notify: restart jenkins
+
+ - name: RedHat | reload systemd
+   systemd:
+     daemon_reload: true
+   when: ansible_os_family == 'RedHat'

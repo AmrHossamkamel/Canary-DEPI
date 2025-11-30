@@ -62,3 +62,6 @@ htmlcov/
 
 # Local development
 .local/
+# Secrets
+*.pem
+ansible/depi (1).pem
