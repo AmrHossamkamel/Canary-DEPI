@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, HTTPException, Query, Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, StreamingResponse
 from typing import List, Dict, Any, Set, Generator, AsyncGenerator
@@ -954,12 +954,16 @@ async def health_check():
         "version": "1.0.0"
     }
 
+@app.get("/favicon.ico")
+async def favicon():
+    return Response(status_code=204)
+
 if __name__ == "__main__":
     # Run the application
     uvicorn.run(
         "main:app",
         host="127.0.0.1",
         port=5000,
-        reload=True,
+        reload=False,
         log_level="info"
     )
