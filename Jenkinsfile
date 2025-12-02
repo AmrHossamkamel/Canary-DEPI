@@ -1,8 +1,16 @@
 pipeline {
   agent any
 
+  parameters {
+    string(name: 'IMAGE_NAME', defaultValue: 'yourdockerusername/myapp', description: 'Docker image repository (e.g., user/repo)')
+  }
+
+  triggers {
+    githubPush()
+  }
+
   environment {
-    IMAGE_NAME = "myapp"
+    IMAGE_NAME = "${params.IMAGE_NAME}"
     IMAGE_TAG  = "${env.BUILD_NUMBER}"
   }
 
