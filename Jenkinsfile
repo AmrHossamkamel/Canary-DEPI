@@ -1,8 +1,15 @@
 pipeline {
   agent any
 
+  options {
+    timestamps()
+    disableConcurrentBuilds()
+    buildDiscarder(logRotator(numToKeepStr: '15'))
+  }
+
   parameters {
-    string(name: 'IMAGE_NAME', defaultValue: 'yourdockerusername/myapp', description: 'Docker image repository (e.g., user/repo)')
+    string(name: 'IMAGE_NAME', defaultValue: 'amrhossam1/canary-depi', description: 'Docker image repo user/repo')
+    string(name: 'IMAGE_TAG_OVERRIDE', defaultValue: '', description: 'Optional image tag override')
   }
 
   triggers {
@@ -11,7 +18,7 @@ pipeline {
 
   environment {
     IMAGE_NAME = "${params.IMAGE_NAME}"
-    IMAGE_TAG  = "${env.BUILD_NUMBER}"
+    IMAGE_TAG  = "${params.IMAGE_TAG_OVERRIDE ?: env.BUILD_NUMBER}"
   }
 
   stages {
@@ -34,13 +41,14 @@ pipeline {
     stage('Lint') {
       when { expression { fileExists('ruff.toml') || fileExists('.flake8') || fileExists('setup.cfg') } }
       steps {
-        sh 'ruff check || flake8 || true'
+        sh 'python3 -m ruff --version >/dev/null 2>&1 && ruff check || (flake8 --version >/dev/null 2>&1 && flake8 || true)'
       }
     }
 
     stage('Test') {
       when { expression { fileExists('tests') || fileExists('pytest.ini') } }
       steps {
+        sh 'mkdir -p reports'
         sh 'pytest --junitxml=reports/junit.xml'
       }
       post {
@@ -53,14 +61,18 @@ pipeline {
     stage('Build Docker Image') {
       steps {
         script {
-          def appImage = docker.build("${IMAGE_NAME}:${IMAGE_TAG}")
-          env.APP_IMAGE_ID = appImage.id
+          docker.build("${IMAGE_NAME}:${IMAGE_TAG}")
         }
       }
     }
 
     stage('Push Image') {
-      when { branch 'main' }
+      when {
+        anyOf {
+          branch 'main'
+          expression { env.BRANCH_NAME == 'main' || env.GIT_BRANCH == 'origin/main' }
+        }
+      }
       steps {
         script {
           def appImage = docker.image("${IMAGE_NAME}:${IMAGE_TAG}")
