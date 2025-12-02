@@ -93,8 +93,14 @@ pipeline {
       echo "❌ Build Failed."
     }
     always {
-      cleanWs()
-      sh 'docker image prune -f || true'
+      script {
+        if (env.WORKSPACE) {
+          cleanWs()
+          sh 'docker image prune -f || true'
+        } else {
+          echo 'Skipping cleanup: no workspace allocated (build aborted before node)'
+        }
+      }
     }
   }
 }
