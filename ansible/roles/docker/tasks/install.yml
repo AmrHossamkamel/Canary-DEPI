@@ -1,23 +1,13 @@
 ---
-- name: AL2023 | install dnf plugins
-  dnf:
-    name: dnf-plugins-core
-    state: present
-
-- name: AL2023 | add Docker CE repo (fedora)
-  command: dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
-  args:
-    creates: /etc/yum.repos.d/docker-ce.repo
-
-- name: AL2023 | install docker engine packages
+- name: AL2023 | install docker engine packages from Amazon Linux repos
   dnf:
     name:
-      - docker-ce
-      - docker-ce-cli
-      - containerd.io
+      - docker
+      - containerd
       - docker-buildx-plugin
       - docker-compose-plugin
     state: present
+  when: ansible_distribution == 'Amazon'
 
 - name: add ec2-user to docker group
   user:
