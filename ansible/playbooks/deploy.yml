@@ -1,0 +1,102 @@
+---
+- hosts: all
+  become: true
+  vars:
+    deploy_dir: /opt/app/canary-depi
+    image_name: "amrhossam1/canary-depi"
+    image_tag: "latest"
+    container_name: "canary-depi"
+    default_port: 8000
+    dockerhub_username: ""
+    dockerhub_password: ""
+
+  tasks:
+    - name: Ensure deploy directory exists
+      file:
+        path: "{{ deploy_dir }}"
+        state: directory
+        mode: '0755'
+
+    - name: Sync project files to remote (excluding VCS and caches)
+      synchronize:
+        src: "{{ playbook_dir }}/../.."
+        dest: "{{ deploy_dir }}"
+        rsync_opts:
+          - "--delete"
+          - "--exclude=.git"
+          - "--exclude=.venv"
+          - "--exclude=env"
+          - "--exclude=__pycache__"
+          - "--exclude=.pytest_cache"
+          - "--exclude=reports"
+          - "--exclude=.env*"
+
+    - name: Detect existing container
+      shell: |
+        docker ps -a --filter "name=^/{{ container_name }}$" --format "{{'{{'}}.ID{{'}}'}}"
+      register: existing_container
+      changed_when: false
+      failed_when: false
+
+    - name: Detect current host port from existing container (if any)
+      shell: |
+        docker inspect -f '{{'{{'}} (index (index .NetworkSettings.Ports "8000/tcp") 0).HostPort {{'}}'}}' {{ container_name }} || true
+      when: existing_container.stdout | length > 0
+      register: detected_port
+      changed_when: false
+      failed_when: false
+
+    - name: Set host port fact
+      set_fact:
+        host_port: "{{ (detected_port.stdout | default('')) | trim | default(default_port, true) }}"
+
+    - name: Stop running container if exists
+      shell: docker stop {{ container_name }} || true
+      when: existing_container.stdout | length > 0
+
+    - name: Remove existing container
+      shell: docker rm -f {{ container_name }} || true
+      when: existing_container.stdout | length > 0
+
+    - name: Remove previous images for this repo
+      shell: |
+        docker images "{{ image_name }}" -q | xargs -r docker rmi -f || true
+      changed_when: false
+
+    - name: Optional Docker login
+      shell: |
+        echo "{{ dockerhub_password }}" | docker login -u "{{ dockerhub_username }}" --password-stdin
+      when: dockerhub_username | length > 0 and dockerhub_password | length > 0
+      no_log: true
+
+    - name: Build new image from synced project
+      shell: |
+        docker build -t {{ image_name }}:{{ image_tag }} {{ deploy_dir }}
+
+    - name: Tag image as latest
+      shell: |
+        docker tag {{ image_name }}:{{ image_tag }} {{ image_name }}:latest
+      changed_when: false
+
+    - name: Push image tag to Docker Hub
+      shell: |
+        docker push {{ image_name }}:{{ image_tag }}
+      when: dockerhub_username | length > 0 and dockerhub_password | length > 0
+
+    - name: Push latest tag to Docker Hub
+      shell: |
+        docker push {{ image_name }}:latest
+      when: dockerhub_username | length > 0 and dockerhub_password | length > 0
+
+    - name: Run container on previous (or default) port
+      shell: |
+        docker run -d --name {{ container_name }} --restart unless-stopped -p {{ host_port }}:8000 {{ image_name }}:{{ image_tag }}
+
+    - name: Show container status
+      shell: docker ps --filter "name=^/{{ container_name }}$"
+      register: container_status
+      changed_when: false
+
+    - name: Print final status
+      debug:
+        msg: "Deployed {{ image_name }}:{{ image_tag }} as '{{ container_name }}' on port {{ host_port }}"

@@ -10,6 +10,7 @@ pipeline {
   parameters {
     string(name: 'IMAGE_NAME', defaultValue: 'amrhossam1/canary-depi', description: 'Docker image repo user/repo')
     string(name: 'IMAGE_TAG_OVERRIDE', defaultValue: '', description: 'Optional image tag override')
+    string(name: 'DOCKERHUB_CREDENTIALS_ID', defaultValue: 'dockerhub-creds', description: 'Jenkins credentials ID for Docker Hub (optional)')
   }
 
   triggers {
@@ -58,27 +59,12 @@ pipeline {
       }
     }
 
-    stage('Build Docker Image') {
+    stage('Deploy with Ansible') {
       steps {
         script {
-          docker.build("${IMAGE_NAME}:${IMAGE_TAG}")
-        }
-      }
-    }
-
-    stage('Push Image') {
-      when {
-        anyOf {
-          branch 'main'
-          expression { env.BRANCH_NAME == 'main' || env.GIT_BRANCH == 'origin/main' }
-        }
-      }
-      steps {
-        script {
-          def appImage = docker.image("${IMAGE_NAME}:${IMAGE_TAG}")
-          docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-creds') {
-            appImage.push("${IMAGE_TAG}")
-            appImage.push('latest')
+          def extraVars = "image_name=${IMAGE_NAME} image_tag=${IMAGE_TAG} container_name=canary-depi"
+          withCredentials([usernamePassword(credentialsId: params.DOCKERHUB_CREDENTIALS_ID, usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
+            sh "ansible-playbook -i ansible/inventory/hosts.ini ansible/playbooks/deploy.yml -e '${extraVars} dockerhub_username=${DOCKERHUB_USERNAME} dockerhub_password=${DOCKERHUB_PASSWORD}'"
           }
         }
       }
@@ -96,7 +82,6 @@ pipeline {
       script {
         if (env.WORKSPACE) {
           cleanWs()
-          sh 'docker image prune -f || true'
         } else {
           echo 'Skipping cleanup: no workspace allocated (build aborted before node)'
         }
