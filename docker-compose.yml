@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: web-scraping-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+      - ALLOWED_ORIGINS=http://localhost:3000,http://localhost:80,http://frontend:80
+    restart: unless-stopped
+    networks:
+      - scraping-network
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/health')\""]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: web-scraping-frontend
+    ports:
+      - "3000:80"
+    environment:
+      - BACKEND_API_URL=http://backend:8000
+    depends_on:
+      - backend
+    restart: unless-stopped
+    networks:
+      - scraping-network
+
+networks:
+  scraping-network:
+    driver: bridge

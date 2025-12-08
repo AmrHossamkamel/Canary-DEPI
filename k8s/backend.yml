@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+  labels:
+    app: backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: backend-container
+          image: 343218178449.dkr.ecr.eu-west-1.amazonaws.com/backend
+          imagePullPolicy: Always     # مهم جداً علشان يسحب آخر نسخة
+          ports:
+            - containerPort: 8000
+          env:
+            - name: PORT
+              value: "8000"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+spec:
+  type: ClusterIP    # Private service داخل الـ cluster
+  selector:
+    app: backend
+  ports:
+    - port: 8000
+      targetPort: 8000

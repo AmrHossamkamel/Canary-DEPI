@@ -1,0 +1,58 @@
+name: Deploy to EKS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # ---------------- AWS AUTH ----------------
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      # ---------------- LOGIN ECR ----------------
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      # ---------------- BUILD BACKEND IMAGE ----------------
+      - name: Build backend Docker image
+        run: |
+          docker build -t backend ./backend
+          docker tag backend:latest ${{ secrets.ECR_BACKEND_URI }}:latest
+
+      - name: Push backend to ECR
+        run: |
+          docker push ${{ secrets.ECR_BACKEND_URI }}:latest
+
+      # ---------------- BUILD FRONTEND IMAGE ----------------
+      - name: Build frontend Docker image
+        run: |
+          docker build -t frontend ./frontend
+          docker tag frontend:latest ${{ secrets.ECR_FRONTEND_URI }}:latest
+
+      - name: Push frontend to ECR
+        run: |
+          docker push ${{ secrets.ECR_FRONTEND_URI }}:latest
+
+      # ---------------- UPDATE KUBECONFIG ----------------
+      - name: Update kubeconfig
+        run: |
+          aws eks update-kubeconfig --region ${{ secrets.AWS_REGION }} --name mycluster
+
+      # ---------------- APPLY K8s MANIFESTS ----------------
+      - name: Apply Kubernetes manifests
+        run: |
+          kubectl apply -f k8s/backend.yml
+          kubectl apply -f k8s/frontend.yml

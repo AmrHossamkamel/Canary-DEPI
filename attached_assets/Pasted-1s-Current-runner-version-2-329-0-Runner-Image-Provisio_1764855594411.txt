@@ -1,0 +1,304 @@
+1s
+Current runner version: '2.329.0'
+Runner Image Provisioner
+Operating System
+Runner Image
+GITHUB_TOKEN Permissions
+Secret source: Actions
+Prepare workflow directory
+Prepare all required actions
+Getting action download info
+Download action repository 'actions/checkout@v4' (SHA:34e114876b0b11c390a56381ad16ebd13914f8d5)
+Download action repository 'actions/setup-python@v5' (SHA:a26af69be951a213d495a4c3e4e4022e16d87065)
+Complete job name: test
+1s
+Run actions/checkout@v4
+Syncing repository: ab622/depi-graduation-project
+Getting Git version info
+Temporarily overriding HOME='/home/runner/work/_temp/20d4ea09-7061-4ec3-bf51-52f1479c590f' before making global git config changes
+Adding repository directory to the temporary git global config as a safe directory
+/usr/bin/git config --global --add safe.directory /home/runner/work/depi-graduation-project/depi-graduation-project
+Deleting the contents of '/home/runner/work/depi-graduation-project/depi-graduation-project'
+Initializing the repository
+Disabling automatic garbage collection
+Setting up auth
+Fetching the repository
+Determining the checkout info
+/usr/bin/git sparse-checkout disable
+/usr/bin/git config --local --unset-all extensions.worktreeConfig
+Checking out the ref
+/usr/bin/git log -1 --format=%H
+b05592de349c29dbebac0289c52ac8542c329252
+2s
+Run actions/setup-python@v5
+Installed versions
+/opt/hostedtoolcache/Python/3.11.14/x64/bin/pip cache dir
+/home/runner/.cache/pip
+pip cache is not found
+10s
+Run python -m pip install --upgrade pip
+Requirement already satisfied: pip in /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages (25.3)
+Collecting fastapi>=0.116.1 (from -r requirements.txt (line 1))
+  Downloading fastapi-0.123.5-py3-none-any.whl.metadata (30 kB)
+Collecting uvicorn>=0.35.0 (from -r requirements.txt (line 2))
+  Downloading uvicorn-0.38.0-py3-none-any.whl.metadata (6.8 kB)
+Collecting beautifulsoup4>=4.13.4 (from -r requirements.txt (line 3))
+  Downloading beautifulsoup4-4.14.3-py3-none-any.whl.metadata (3.8 kB)
+Collecting requests>=2.32.4 (from -r requirements.txt (line 4))
+  Downloading requests-2.32.5-py3-none-any.whl.metadata (4.9 kB)
+Collecting trafilatura>=2.0.0 (from -r requirements.txt (line 5))
+  Downloading trafilatura-2.0.0-py3-none-any.whl.metadata (12 kB)
+Collecting pydantic>=2.11.7 (from -r requirements.txt (line 6))
+  Downloading pydantic-2.12.5-py3-none-any.whl.metadata (90 kB)
+Collecting starlette<0.51.0,>=0.40.0 (from fastapi>=0.116.1->-r requirements.txt (line 1))
+  Downloading starlette-0.50.0-py3-none-any.whl.metadata (6.3 kB)
+Collecting typing-extensions>=4.8.0 (from fastapi>=0.116.1->-r requirements.txt (line 1))
+  Downloading typing_extensions-4.15.0-py3-none-any.whl.metadata (3.3 kB)
+Collecting annotated-doc>=0.0.2 (from fastapi>=0.116.1->-r requirements.txt (line 1))
+  Downloading annotated_doc-0.0.4-py3-none-any.whl.metadata (6.6 kB)
+Collecting annotated-types>=0.6.0 (from pydantic>=2.11.7->-r requirements.txt (line 6))
+  Downloading annotated_types-0.7.0-py3-none-any.whl.metadata (15 kB)
+Collecting pydantic-core==2.41.5 (from pydantic>=2.11.7->-r requirements.txt (line 6))
+  Downloading pydantic_core-2.41.5-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (7.3 kB)
+Collecting typing-inspection>=0.4.2 (from pydantic>=2.11.7->-r requirements.txt (line 6))
+  Downloading typing_inspection-0.4.2-py3-none-any.whl.metadata (2.6 kB)
+Collecting anyio<5,>=3.6.2 (from starlette<0.51.0,>=0.40.0->fastapi>=0.116.1->-r requirements.txt (line 1))
+  Downloading anyio-4.12.0-py3-none-any.whl.metadata (4.3 kB)
+Collecting idna>=2.8 (from anyio<5,>=3.6.2->starlette<0.51.0,>=0.40.0->fastapi>=0.116.1->-r requirements.txt (line 1))
+  Downloading idna-3.11-py3-none-any.whl.metadata (8.4 kB)
+Collecting click>=7.0 (from uvicorn>=0.35.0->-r requirements.txt (line 2))
+  Downloading click-8.3.1-py3-none-any.whl.metadata (2.6 kB)
+Collecting h11>=0.8 (from uvicorn>=0.35.0->-r requirements.txt (line 2))
+  Downloading h11-0.16.0-py3-none-any.whl.metadata (8.3 kB)
+Collecting soupsieve>=1.6.1 (from beautifulsoup4>=4.13.4->-r requirements.txt (line 3))
+  Downloading soupsieve-2.8-py3-none-any.whl.metadata (4.6 kB)
+Collecting charset_normalizer<4,>=2 (from requests>=2.32.4->-r requirements.txt (line 4))
+  Downloading charset_normalizer-3.4.4-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (37 kB)
+Collecting urllib3<3,>=1.21.1 (from requests>=2.32.4->-r requirements.txt (line 4))
+  Downloading urllib3-2.5.0-py3-none-any.whl.metadata (6.5 kB)
+Collecting certifi>=2017.4.17 (from requests>=2.32.4->-r requirements.txt (line 4))
+  Downloading certifi-2025.11.12-py3-none-any.whl.metadata (2.5 kB)
+Collecting courlan>=1.3.2 (from trafilatura>=2.0.0->-r requirements.txt (line 5))
+  Downloading courlan-1.3.2-py3-none-any.whl.metadata (17 kB)
+Collecting htmldate>=1.9.2 (from trafilatura>=2.0.0->-r requirements.txt (line 5))
+  Downloading htmldate-1.9.4-py3-none-any.whl.metadata (10 kB)
+Collecting justext>=3.0.1 (from trafilatura>=2.0.0->-r requirements.txt (line 5))
+  Downloading justext-3.0.2-py2.py3-none-any.whl.metadata (7.3 kB)
+Collecting lxml>=5.3.0 (from trafilatura>=2.0.0->-r requirements.txt (line 5))
+  Downloading lxml-6.0.2-cp311-cp311-manylinux_2_26_x86_64.manylinux_2_28_x86_64.whl.metadata (3.6 kB)
+Collecting babel>=2.16.0 (from courlan>=1.3.2->trafilatura>=2.0.0->-r requirements.txt (line 5))
+  Downloading babel-2.17.0-py3-none-any.whl.metadata (2.0 kB)
+Collecting tld>=0.13 (from courlan>=1.3.2->trafilatura>=2.0.0->-r requirements.txt (line 5))
+  Downloading tld-0.13.1-py2.py3-none-any.whl.metadata (10 kB)
+Collecting dateparser>=1.1.2 (from htmldate>=1.9.2->trafilatura>=2.0.0->-r requirements.txt (line 5))
+  Downloading dateparser-1.2.2-py3-none-any.whl.metadata (29 kB)
+Collecting python-dateutil>=2.9.0.post0 (from htmldate>=1.9.2->trafilatura>=2.0.0->-r requirements.txt (line 5))
+  Downloading python_dateutil-2.9.0.post0-py2.py3-none-any.whl.metadata (8.4 kB)
+Collecting pytz>=2024.2 (from dateparser>=1.1.2->htmldate>=1.9.2->trafilatura>=2.0.0->-r requirements.txt (line 5))
+  Downloading pytz-2025.2-py2.py3-none-any.whl.metadata (22 kB)
+Collecting regex>=2024.9.11 (from dateparser>=1.1.2->htmldate>=1.9.2->trafilatura>=2.0.0->-r requirements.txt (line 5))
+  Downloading regex-2025.11.3-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (40 kB)
+Collecting tzlocal>=0.2 (from dateparser>=1.1.2->htmldate>=1.9.2->trafilatura>=2.0.0->-r requirements.txt (line 5))
+  Downloading tzlocal-5.3.1-py3-none-any.whl.metadata (7.6 kB)
+Collecting lxml_html_clean (from lxml[html_clean]>=4.4.2->justext>=3.0.1->trafilatura>=2.0.0->-r requirements.txt (line 5))
+  Downloading lxml_html_clean-0.4.3-py3-none-any.whl.metadata (2.3 kB)
+Collecting six>=1.5 (from python-dateutil>=2.9.0.post0->htmldate>=1.9.2->trafilatura>=2.0.0->-r requirements.txt (line 5))
+  Downloading six-1.17.0-py2.py3-none-any.whl.metadata (1.7 kB)
+Downloading fastapi-0.123.5-py3-none-any.whl (111 kB)
+Downloading pydantic-2.12.5-py3-none-any.whl (463 kB)
+Downloading pydantic_core-2.41.5-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (2.1 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.1/2.1 MB 136.8 MB/s  0:00:00
+Downloading starlette-0.50.0-py3-none-any.whl (74 kB)
+Downloading anyio-4.12.0-py3-none-any.whl (113 kB)
+Downloading uvicorn-0.38.0-py3-none-any.whl (68 kB)
+Downloading beautifulsoup4-4.14.3-py3-none-any.whl (107 kB)
+Downloading requests-2.32.5-py3-none-any.whl (64 kB)
+Downloading charset_normalizer-3.4.4-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (151 kB)
+Downloading idna-3.11-py3-none-any.whl (71 kB)
+Downloading urllib3-2.5.0-py3-none-any.whl (129 kB)
+Downloading trafilatura-2.0.0-py3-none-any.whl (132 kB)
+Downloading annotated_doc-0.0.4-py3-none-any.whl (5.3 kB)
+Downloading annotated_types-0.7.0-py3-none-any.whl (13 kB)
+Downloading certifi-2025.11.12-py3-none-any.whl (159 kB)
+Downloading click-8.3.1-py3-none-any.whl (108 kB)
+Downloading courlan-1.3.2-py3-none-any.whl (33 kB)
+Downloading babel-2.17.0-py3-none-any.whl (10.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 10.2/10.2 MB 142.0 MB/s  0:00:00
+Downloading h11-0.16.0-py3-none-any.whl (37 kB)
+Downloading htmldate-1.9.4-py3-none-any.whl (31 kB)
+Downloading dateparser-1.2.2-py3-none-any.whl (315 kB)
+Downloading justext-3.0.2-py2.py3-none-any.whl (837 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 837.9/837.9 kB 107.0 MB/s  0:00:00
+Downloading lxml-6.0.2-cp311-cp311-manylinux_2_26_x86_64.manylinux_2_28_x86_64.whl (5.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 5.2/5.2 MB 149.6 MB/s  0:00:00
+Downloading python_dateutil-2.9.0.post0-py2.py3-none-any.whl (229 kB)
+Downloading pytz-2025.2-py2.py3-none-any.whl (509 kB)
+Downloading regex-2025.11.3-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (800 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 800.4/800.4 kB 94.6 MB/s  0:00:00
+Downloading six-1.17.0-py2.py3-none-any.whl (11 kB)
+Downloading soupsieve-2.8-py3-none-any.whl (36 kB)
+Downloading tld-0.13.1-py2.py3-none-any.whl (274 kB)
+Downloading typing_extensions-4.15.0-py3-none-any.whl (44 kB)
+Downloading typing_inspection-0.4.2-py3-none-any.whl (14 kB)
+Downloading tzlocal-5.3.1-py3-none-any.whl (18 kB)
+Downloading lxml_html_clean-0.4.3-py3-none-any.whl (14 kB)
+Installing collected packages: pytz, urllib3, tzlocal, typing-extensions, tld, soupsieve, six, regex, lxml, idna, h11, click, charset_normalizer, certifi, babel, annotated-types, annotated-doc, uvicorn, typing-inspection, requests, python-dateutil, pydantic-core, lxml_html_clean, courlan, beautifulsoup4, anyio, starlette, pydantic, dateparser, justext, htmldate, fastapi, trafilatura
+
+Successfully installed annotated-doc-0.0.4 annotated-types-0.7.0 anyio-4.12.0 babel-2.17.0 beautifulsoup4-4.14.3 certifi-2025.11.12 charset_normalizer-3.4.4 click-8.3.1 courlan-1.3.2 dateparser-1.2.2 fastapi-0.123.5 h11-0.16.0 htmldate-1.9.4 idna-3.11 justext-3.0.2 lxml-6.0.2 lxml_html_clean-0.4.3 pydantic-2.12.5 pydantic-core-2.41.5 python-dateutil-2.9.0.post0 pytz-2025.2 regex-2025.11.3 requests-2.32.5 six-1.17.0 soupsieve-2.8 starlette-0.50.0 tld-0.13.1 trafilatura-2.0.0 typing-extensions-4.15.0 typing-inspection-0.4.2 tzlocal-5.3.1 urllib3-2.5.0 uvicorn-0.38.0
+Collecting pytest
+  Downloading pytest-9.0.1-py3-none-any.whl.metadata (7.6 kB)
+Collecting pytest-asyncio
+  Downloading pytest_asyncio-1.3.0-py3-none-any.whl.metadata (4.1 kB)
+Collecting httpx
+  Downloading httpx-0.28.1-py3-none-any.whl.metadata (7.1 kB)
+Collecting ruff
+  Downloading ruff-0.14.7-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (25 kB)
+Collecting iniconfig>=1.0.1 (from pytest)
+  Downloading iniconfig-2.3.0-py3-none-any.whl.metadata (2.5 kB)
+Collecting packaging>=22 (from pytest)
+  Downloading packaging-25.0-py3-none-any.whl.metadata (3.3 kB)
+Collecting pluggy<2,>=1.5 (from pytest)
+  Downloading pluggy-1.6.0-py3-none-any.whl.metadata (4.8 kB)
+Collecting pygments>=2.7.2 (from pytest)
+  Downloading pygments-2.19.2-py3-none-any.whl.metadata (2.5 kB)
+Requirement already satisfied: typing-extensions>=4.12 in /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages (from pytest-asyncio) (4.15.0)
+Requirement already satisfied: anyio in /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages (from httpx) (4.12.0)
+Requirement already satisfied: certifi in /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages (from httpx) (2025.11.12)
+Collecting httpcore==1.* (from httpx)
+  Downloading httpcore-1.0.9-py3-none-any.whl.metadata (21 kB)
+Requirement already satisfied: idna in /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages (from httpx) (3.11)
+Requirement already satisfied: h11>=0.16 in /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages (from httpcore==1.*->httpx) (0.16.0)
+Downloading pytest-9.0.1-py3-none-any.whl (373 kB)
+Downloading pluggy-1.6.0-py3-none-any.whl (20 kB)
+Downloading pytest_asyncio-1.3.0-py3-none-any.whl (15 kB)
+Downloading httpx-0.28.1-py3-none-any.whl (73 kB)
+Downloading httpcore-1.0.9-py3-none-any.whl (78 kB)
+Downloading ruff-0.14.7-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (14.1 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 14.1/14.1 MB 141.9 MB/s  0:00:00
+Downloading iniconfig-2.3.0-py3-none-any.whl (7.5 kB)
+Downloading packaging-25.0-py3-none-any.whl (66 kB)
+Downloading pygments-2.19.2-py3-none-any.whl (1.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.2/1.2 MB 130.4 MB/s  0:00:00
+Installing collected packages: ruff, pygments, pluggy, packaging, iniconfig, httpcore, pytest, httpx, pytest-asyncio
+
+Successfully installed httpcore-1.0.9 httpx-0.28.1 iniconfig-2.3.0 packaging-25.0 pluggy-1.6.0 pygments-2.19.2 pytest-9.0.1 pytest-asyncio-1.3.0 ruff-0.14.7
+0s
+Run ruff check app/ --ignore E501,F401
+invalid-syntax: Expected `except` or `finally` after `try` block
+   --> app/main.py:358:5
+    |
+356 |             raise HTTPException(status_code=404, detail="No content could be extracted from the provided URL")
+357 |         
+358 |     return {"data": page_data}
+    |     ^^^^^^
+359 |     
+360 |     except HTTPException:
+    |
+
+invalid-syntax: Expected a statement
+   --> app/main.py:360:5
+    |
+358 |     return {"data": page_data}
+359 |     
+360 |     except HTTPException:
+    |     ^^^^^^
+361 |         raise
+362 |     except Exception as e:
+    |
+
+invalid-syntax: Expected an expression
+   --> app/main.py:360:26
+    |
+358 |     return {"data": page_data}
+359 |     
+360 |     except HTTPException:
+    |                          ^
+361 |         raise
+362 |     except Exception as e:
+    |
+
+invalid-syntax: Unexpected indentation
+   --> app/main.py:361:1
+    |
+360 |     except HTTPException:
+361 |         raise
+    | ^^^^^^^^
+362 |     except Exception as e:
+363 |         logger.error(f"Error during single page scraping: {e}")
+    |
+
+invalid-syntax: Expected a statement
+   --> app/main.py:362:5
+    |
+360 |     except HTTPException:
+361 |         raise
+362 |     except Exception as e:
+    |     ^^^^^^
+363 |         logger.error(f"Error during single page scraping: {e}")
+364 |         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
+    |
+
+invalid-syntax: Expected a statement
+   --> app/main.py:362:22
+    |
+360 |     except HTTPException:
+361 |         raise
+362 |     except Exception as e:
+    |                      ^^
+363 |         logger.error(f"Error during single page scraping: {e}")
+364 |         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
+    |
+
+invalid-syntax: Expected an expression
+   --> app/main.py:362:27
+    |
+360 |     except HTTPException:
+361 |         raise
+362 |     except Exception as e:
+    |                           ^
+363 |         logger.error(f"Error during single page scraping: {e}")
+364 |         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
+    |
+
+invalid-syntax: Unexpected indentation
+   --> app/main.py:363:1
+    |
+361 |         raise
+362 |     except Exception as e:
+363 |         logger.error(f"Error during single page scraping: {e}")
+    | ^^^^^^^^
+364 |         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
+    |
+
+invalid-syntax: Expected a statement
+   --> app/main.py:366:1
+    |
+364 |         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
+365 |
+366 | @app.post("/scrape-all", response_model=List[ScrapedPage], tags=["Web Scraping"])
+    | ^
+367 | async def scrape_all_pages(
+368 |     url: str = Query(..., description="The base URL of the website to scrape completely", example="https://example.com"),
+    |
+
+Found 9 errors.
+Error: Process completed with exit code 1.
+0s
+0s
+0s
+Post job cleanup.
+/usr/bin/git version
+git version 2.52.0
+Temporarily overriding HOME='/home/runner/work/_temp/2d112599-f7fe-4031-a42e-f2bc5dbfdc6b' before making global git config changes
+Adding repository directory to the temporary git global config as a safe directory
+/usr/bin/git config --global --add safe.directory /home/runner/work/depi-graduation-project/depi-graduation-project
+/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+http.https://github.com/.extraheader
+/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+0s
+Cleaning up orphan processes

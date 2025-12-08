@@ -1,0 +1,73 @@
+name: Frontend CI/CD
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - "frontend/**"
+      - ".github/workflows/frontend.yml"
+
+jobs:
+
+  validate:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - run: npm install -g html-validate
+
+      - run: |
+          html-validate public/*.html --config '{"extends": ["html-validate:recommended"], "rules": {"no-inline-style": "off"}}' || true
+
+      - run: |
+          node --check public/script.js
+          node --check public/config.js
+
+      - run: |
+          test -f public/index.html
+          test -f public/script.js
+          test -f public/styles.css
+          test -f public/config.js
+          echo "All frontend files validated."
+
+  docker_deploy:
+    needs: validate
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Login to ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build & Push Frontend Image
+        env:
+          ECR_URI: ${{ secrets.ECR_FRONTEND_URI }}
+        run: |
+          docker build -t $ECR_URI:latest ./frontend
+          docker push $ECR_URI:latest
+
+      - name: Update kubeconfig
+        run: |
+          aws eks update-kubeconfig --region ${{ secrets.AWS_REGION }} --name mycluster
+
+      - name: Deploy Frontend to EKS
+        run: |
+          kubectl set image deployment/frontend-deployment frontend-container=${{ secrets.ECR_FRONTEND_URI }}:latest
+          kubectl rollout restart deployment/frontend-deployment

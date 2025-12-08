@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Scraping API - إدارة واجهة برمجة التطبيقات</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <div class="logo-icon">🔍</div>
+                <h1>Web Scraping API</h1>
+            </div>
+            <div class="status-indicator">
+                <div class="status-dot" id="statusDot"></div>
+                <span id="statusText">جاري التحقق...</span>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- API Control Panel -->
+            <section class="control-panel">
+                <div class="panel-header">
+                    <h2>🎛️ لوحة التحكم</h2>
+                    <p>إدارة عمليات استخراج محتوى المواقع</p>
+                </div>
+
+                <div class="form-container">
+                    <form id="scrapeForm" class="scrape-form">
+                        <div class="input-group">
+                            <label for="url">🌐 رابط الموقع</label>
+                            <input 
+                                type="url" 
+                                id="url" 
+                                name="url" 
+                                placeholder="https://example.com"
+                                required
+                                autocomplete="url"
+                            >
+                        </div>
+
+                        <!-- Scraping Mode Selection -->
+                        <div class="mode-selection">
+                            <label class="mode-label">🎯 طريقة الاستخراج</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="scrapingMode" value="single">
+                                    <span class="radio-custom"></span>
+                                    <span class="radio-text">🎯 صفحة واحدة فقط</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="scrapingMode" value="limited" checked>
+                                    <span class="radio-custom"></span>
+                                    <span class="radio-text">عدد محدود من الصفحات</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="scrapingMode" value="stream">
+                                    <span class="radio-custom"></span>
+                                    <span class="radio-text">📡 بث مباشر للنتائج</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="scrapingMode" value="unlimited">
+                                    <span class="radio-custom"></span>
+                                    <span class="radio-text">🚀 جميع صفحات الموقع (بدون حد)</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="settings-grid">
+                            <div class="input-group" id="maxPagesGroup">
+                                <label for="maxPages">📄 عدد الصفحات الأقصى</label>
+                                <input 
+                                    type="number" 
+                                    id="maxPages" 
+                                    name="maxPages" 
+                                    value="50" 
+                                    min="1"
+                                >
+                                <span class="input-hint">سيتم تجاهل هذا الرقم عند اختيار "بدون حد"</span>
+                            </div>
+
+                            <div class="input-group">
+                                <label for="timeout">⏱️ مهلة الاتصال (ثانية)</label>
+                                <input 
+                                    type="number" 
+                                    id="timeout" 
+                                    name="timeout" 
+                                    value="10" 
+                                    min="5" 
+                                    max="60"
+                                >
+                                <span class="input-hint">5-60 ثانية</span>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="submit-btn" id="submitBtn">
+                            <span class="btn-icon">🚀</span>
+                            <span class="btn-text">بدء الاستخراج</span>
+                            <div class="btn-loader"></div>
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Progress Section -->
+            <section class="progress-section" id="progressSection" style="display: none;">
+                <div class="progress-header">
+                    <h3>📊 حالة التقدم</h3>
+                    <div class="progress-stats">
+                        <span id="progressText">جاري المعالجة...</span>
+                    </div>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="progressBar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Results Section -->
+            <section class="results-section" id="resultsSection" style="display: none;">
+                <div class="results-header">
+                    <h3>📋 النتائج</h3>
+                    <div class="results-actions">
+                        <button class="action-btn" id="downloadBtn">
+                            📥 تحميل JSON
+                        </button>
+                        <button class="action-btn" id="sendToDbBtn">
+                            🗄️ إرسال لقاعدة البيانات
+                        </button>
+                        <button class="action-btn" id="clearBtn">
+                            🗑️ مسح النتائج
+                        </button>
+                    </div>
+                </div>
+                <div class="results-grid" id="resultsGrid">
+                    <!-- Results will be populated here -->
+                </div>
+            </section>
+
+            <!-- API Info -->
+            <section class="api-info">
+                <div class="info-header">
+                    <h3>📚 معلومات API</h3>
+                </div>
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="info-icon">🔗</div>
+                        <h4>نقطة النهاية</h4>
+                        <code>POST /scrape</code>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">📝</div>
+                        <h4>التوثيق</h4>
+                        <a href="#" id="docsLink" target="_blank">عرض Swagger UI</a>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">💚</div>
+                        <h4>فحص الحالة</h4>
+                        <code>GET /health</code>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">🗄️</div>
+                        <h4>إدارة قاعدة البيانات</h4>
+                        <a href="#" id="databaseLink" target="_blank">Hasura Database Management</a>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>© 2025 Web Scraping API - Made by Eng: Amr Hossam</p>
+        </footer>
+    </div>
+
+    <!-- Notification System -->
+    <div class="notification-container" id="notificationContainer"></div>
+
+    <script src="/config.js"></script>
+    <script src="/script.js"></script>
+</body>
+</html>
+<!-- # الشيكو بيطس -->
