@@ -1,3 +1,0 @@
-nginx_tls_enabled: false
-nginx_tls_cert_path: /etc/nginx/certs/fullchain.pem
-nginx_tls_key_path: /etc/nginx/certs/privkey.pem

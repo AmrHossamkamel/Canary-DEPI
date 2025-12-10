@@ -1,7 +1,0 @@
-nginx_packages:
-  - nginx
-nginx_remove_default_site: true
-nginx_manage_main_conf: false
-nginx_server_name: _
-nginx_root: /var/www/html
-nginx_proxy_upstream: ''

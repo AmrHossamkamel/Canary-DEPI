@@ -1,5 +1,0 @@
-- name: ensure nginx service
-  service:
-    name: nginx
-    state: started
-    enabled: true
